@@ -1,0 +1,181 @@
+:root {
+  --field-bg-color: rgb(215, 221, 253);
+  --field-outline-color: rgb(75, 102, 255);
+  --danger-color: rgb(255, 72, 72);
+  --danger-light-color: rgb(255, 192, 192);
+  --success-color: rgb(16, 126, 30);
+  --success-light-color: rgb(199, 255, 192);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+h1{
+  text-align: center;
+    color: var(--field-outline-color);
+}
+
+form {
+    position: absolute;
+  display: none;
+  flex-direction: column;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid var(--field-outline-color);
+  border-radius: 15px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+}
+
+.trash{
+    position: absolute;
+  display: none;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid var(--field-outline-color);
+  border-radius: 15px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.overlay{
+    visibility: hidden;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(31, 31, 104, 0.452);
+    margin: 0;
+}
+
+select,
+input {
+  padding: 10px;
+  border: none;
+  background-color: var(--field-bg-color);
+  border-radius: 15px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+
+input:hover {
+  outline: 2px solid var(--field-outline-color);
+}
+
+label {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+
+button{
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--field-outline-color);
+    color: white;
+    border-radius: 15px;
+    margin: auto;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: var(--field-bg-color);
+    color: var(--field-outline-color);
+    outline: 2px solid var(--field-outline-color);
+}
+
+button.view-trash{
+    background-color: var(--danger-color);
+}
+
+button.view-trash:hover{
+    background-color: var(--danger-light-color);
+    color: var(--danger-color);
+    outline: 2px solid var(--danger-color);
+}
+
+.controls{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+
+table{
+    border: 1px solid var(--field-outline-color);
+    margin: auto;
+    padding: 20px;
+    border-radius: 15px;
+    overflow-x:auto;
+}
+
+table th{
+    background-color: var(--field-outline-color);
+    color: var(--field-bg-color);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+table td{
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+table tr:nth-child(even){
+    background-color: var(--field-bg-color);
+}
+
+table tr:hover {
+    outline: 2px solid var(--field-outline-color);
+    border-radius: 10px;
+}
+
+
+.error{
+    color: red;
+}
+
+.actions{
+    display: flex;
+}
+
+.edit-btn{
+    border-radius: 15px 0 0 15px;
+    padding: 10px;
+}
+.delete-btn{
+    border-radius: 0 15px 15px 0;
+    background-color: var(--danger-color);
+    padding: 10px;
+}
+
+
+.delete-btn:hover{
+    background-color: var(--danger-light-color);
+    color: var(--danger-color);
+    outline: 2px solid var(--danger-color);
+    padding: 10px;
+}
+
+.save-btn{
+    border-radius: 15px;
+    background-color: var(--success-color);
+    padding: 10px;
+}
+
+.save-btn:hover{
+    background-color: var(--success-light-color);
+    color: var(--success-color);
+    outline: 2px solid var(--success-color);
+    padding: 10px;
+}

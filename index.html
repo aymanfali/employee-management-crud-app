@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <h1>Employee Management CRUD</h1>
+    <form class="form" action="" method="post">
+        <h1>Add New Employee</h1>
+        <label for="name">name</label>
+        <input type="text" name="name" id="name" placeholder="Employee Name">
+
+        <label for="role">role</label>
+        <input type="text" name="role" id="role" placeholder="Employee Role">
+
+        <label for="status">status</label>
+        <select name="status" id="status">
+            <option value="" disabled selected> -- select status -- </option>
+            <option value="active">Active</option>
+            <option value="leave">On Leave</option>
+            <option value="terminated">Terminated</option>
+        </select>
+
+        <button type="submit" id="submit">Add Employee</button>
+    </form>
+
+    <div class="controls">
+        <button class="add-new">Add Employee</button>
+        <button class="view-trash">Trash</button>
+    </div>
+
+    <table class="main-table">
+        <thead>
+            <th>Employee Name</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </thead>
+        <tbody class="main-table-body"></tbody>
+    </table>
+
+
+    <div class="trash">
+        <table>
+            <thead>
+                <th>Employee Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </thead>
+            <tbody class="trash-body">
+                <tr>
+                    <td>ayman</td>
+                    <td>admin</td>
+                    <td>available</td>
+                    <td>
+                        <button class="edit-btn">Restore</button>
+                        <button class="delete-btn">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
