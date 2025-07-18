@@ -13,6 +13,12 @@ const employeesTable = document.querySelector(".main-table");
 const employeesTableBody = document.querySelector(".main-table-body");
 const trashTableBody = document.querySelector(".trash-body");
 
+let itemsCount = 0;
+let deletedItems = 0;
+
+const addedCount = document.querySelector(".count-added");
+const removedCount = document.querySelector(".count-removed");
+
 addNew.addEventListener("click", () => {
   addForm.style.display = "flex";
   overlay.style.visibility = "visible";
@@ -68,6 +74,10 @@ submit.addEventListener("click", (e) => {
     return;
   }
 
+  // count the added items
+  itemsCount++;
+  addedCount.textContent = itemsCount;
+
   // Create table row
   const tr = document.createElement("tr");
   const tdName = document.createElement("td");
@@ -78,6 +88,7 @@ submit.addEventListener("click", (e) => {
   tdStatus.textContent = statusField.value;
   const tdAction = document.createElement("td");
 
+  // create Edit action for the row
   const editBtn = document.createElement("button");
   editBtn.textContent = "Edit";
   editBtn.className = "edit-btn";
@@ -85,28 +96,12 @@ submit.addEventListener("click", (e) => {
     editRow(tr);
   });
 
+  // create delete action for the row
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Delete";
   deleteBtn.className = "delete-btn";
   deleteBtn.addEventListener("click", (e) => {
-    console.log(tr);
     trashTableBody.appendChild(tr);
-    deleteRow(tr);
-  });
-
-  const restoreBtn = document.createElement("button");
-  restoreBtn.textContent = "Restore";
-  restoreBtn.className = "edit-btn";
-  restoreBtn.addEventListener("click", (e) => {
-    console.log(tr);
-    deleteRow(tr);
-  });
-
-  const pDeleteBtn = document.createElement("button");
-  pDeleteBtn.textContent = "Permenet Delete";
-  pDeleteBtn.className = "delete-btn";
-  pDeleteBtn.addEventListener("click", (e) => {
-    console.log(tr);
     deleteRow(tr);
   });
 
@@ -126,8 +121,8 @@ submit.addEventListener("click", (e) => {
 
 function editRow(row) {
   const newName = prompt("Edit Name:", row.children[0].textContent);
-    if (newName === null) return; 
-    
+  if (newName === null) return;
+
   const newRole = prompt("Edit Role:", row.children[1].textContent);
   if (newRole === null) return;
 
@@ -136,14 +131,79 @@ function editRow(row) {
 }
 
 function deleteRow(row) {
-  if (confirm("Are you sure you want to delete this employee to the trash?")) {
+  if (confirm("Are you sure you want to move this employee to the trash?")) {
     const trashRow = row.cloneNode(true);
-    trashRow.removeChild(trashRow.lastElementChild); 
+    row.remove(); // Remove the original row first
+
+    // Remove last child in row (action)
+    trashRow.removeChild(trashRow.lastElementChild);
+
+    const restoreBtn = document.createElement("button");
+    restoreBtn.textContent = "Restore";
+    restoreBtn.className = "edit-btn";
+    restoreBtn.addEventListener("click", () => {
+      // Clone the trash row without buttons
+      const restoredRow = trashRow.cloneNode(true);
+      restoredRow.removeChild(restoredRow.lastElementChild);
+
+      // get back the original action buttons
+      const tdAction = document.createElement("td");
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.className = "edit-btn";
+      editBtn.addEventListener("click", () => {
+        editRow(restoredRow);
+      });
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.className = "delete-btn";
+      deleteBtn.addEventListener("click", () => {
+        deleteRow(restoredRow);
+      });
+
+      // count the removed items
+      --deletedItems;
+      removedCount.textContent = deletedItems;
+
+      // decrement added items
+      ++itemsCount;
+      addedCount.textContent = itemsCount;
+
+      tdAction.append(editBtn, deleteBtn);
+      restoredRow.appendChild(tdAction);
+
+      employeesTableBody.appendChild(restoredRow);
+
+      trashRow.remove();
+    });
+
+    const pDeleteBtn = document.createElement("button");
+    pDeleteBtn.textContent = "Permanent Delete";
+    pDeleteBtn.className = "delete-btn";
+    pDeleteBtn.addEventListener("click", () => {
+      if (
+        confirm("Are you sure you want to permanently delete this employee?")
+      ) {
+        trashRow.remove();
+
+        // count the removed items
+        --deletedItems;
+        removedCount.textContent = deletedItems;
+      }
+    });
+
+    // count the removed items
+    ++deletedItems;
+    removedCount.textContent = deletedItems;
+
+    // decrement added items
+    --itemsCount;
+    addedCount.textContent = itemsCount;
 
     const trashActions = document.createElement("td");
     trashActions.append(restoreBtn, pDeleteBtn);
-
+    trashRow.appendChild(trashActions);
     trashTableBody.appendChild(trashRow);
-    row.remove();
   }
 }

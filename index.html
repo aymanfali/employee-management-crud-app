@@ -31,19 +31,31 @@
     </form>
 
     <div class="controls">
-        <button class="add-new">Add Employee</button>
-        <button class="view-trash">Trash</button>
+        <button class="add-new">
+            Add Employee
+        </button>
+        <p>There are (
+            <span class="count-added">0</span>
+            ) Employees
+        </p>
+        <button class="view-trash">
+            Trash (
+            <span class="count-removed">0</span>
+            )
+        </button>
     </div>
 
-    <table class="main-table">
-        <thead>
-            <th>Employee Name</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </thead>
-        <tbody class="main-table-body"></tbody>
-    </table>
+    <div class="table">
+        <table class="main-table">
+            <thead>
+                <th>Employee Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </thead>
+            <tbody class="main-table-body"></tbody>
+        </table>
+    </div>
 
 
     <div class="trash">
@@ -54,17 +66,7 @@
                 <th>Status</th>
                 <th>Actions</th>
             </thead>
-            <tbody class="trash-body">
-                <tr>
-                    <td>ayman</td>
-                    <td>admin</td>
-                    <td>available</td>
-                    <td>
-                        <button class="edit-btn">Restore</button>
-                        <button class="delete-btn">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
+            <tbody class="trash-body"></tbody>
         </table>
     </div>
 
