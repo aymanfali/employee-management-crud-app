@@ -19,6 +19,9 @@
         <label for="role">role</label>
         <input type="text" name="role" id="role" placeholder="Employee Role">
 
+        <label for="salary">salary</label>
+        <input type="number" min="0" name="salary" id="salary" placeholder="Employee salary">
+
         <label for="status">status</label>
         <select name="status" id="status">
             <option value="" disabled selected> -- select status -- </option>
@@ -45,11 +48,56 @@
         </button>
     </div>
 
+    <div class="bonus-modal">
+        <form class="form" action="" method="post">
+            <h1>Add Bonus (%)</h1>
+            <label for="bonus">Bonus</label>
+            <input type="number" min="0" max="100" maxlength="3" name="bonus" id="bonus" placeholder="Employee bonus">
+            <button type="submit" id="submit-bonus">Add Bonus</button>
+
+        </form>
+    </div>
+
+    <form action="" method="post" class="filter-form">
+        <h1>Filter Employee</h1>
+        <div class="body">
+            <div class="field">
+                <label for="filter-name">name</label>
+                <input type="text" name="filter-name" id="filter-name" placeholder="Employee Name">
+            </div>
+            
+            <div class="field">
+                <label for="filter-role">role</label>
+                <input type="text" name="filter-role" id="filter-role" placeholder="Employee Role">
+            </div>
+            
+            <div class="field">
+                <label for="filter-salary">salary</label>
+                <input type="number" min="0" name="filter-salary" id="filter-salary" placeholder="Employee salary">
+            </div>
+            
+            <div class="field">
+                <label for="filter-status">status</label>
+                <select name="filter-status" id="filter-status">
+                    <option value="" disabled selected> -- select status -- </option>
+                    <option value="active">Active</option>
+                    <option value="leave">On Leave</option>
+                    <option value="terminated">Terminated</option>
+                </select>
+            </div>
+        </div>
+        
+        <button type="submit" id="filter-submit">Filter</button>
+    </form>
+
+    <hr>
+
     <div class="table">
         <table class="main-table">
             <thead>
                 <th>Employee Name</th>
                 <th>Role</th>
+                <th>Salary (bonus)</th>
                 <th>Status</th>
                 <th>Actions</th>
             </thead>
@@ -57,12 +105,20 @@
         </table>
     </div>
 
+    <div class="payroll">
+        <h3>Total Payroll</h3>
+        <p id="total-salaries">0</p>
+    </div>
+
+    
+
 
     <div class="trash">
         <table>
             <thead>
                 <th>Employee Name</th>
                 <th>Role</th>
+                <th>Salary</th>
                 <th>Status</th>
                 <th>Actions</th>
             </thead>
