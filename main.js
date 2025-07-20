@@ -8,10 +8,15 @@ const overlay = document.querySelector(".overlay");
 const submit = document.querySelector("#submit");
 const nameField = document.querySelector("#name");
 const roleField = document.querySelector("#role");
+const salaryField = document.querySelector("#salary");
 const statusField = document.querySelector("#status");
 const employeesTable = document.querySelector(".main-table");
 const employeesTableBody = document.querySelector(".main-table-body");
 const trashTableBody = document.querySelector(".trash-body");
+const addBonus = document.querySelector(".bonus-modal .form");
+const submitBonus = document.querySelector("#submit-bonus");
+const bonusField = document.querySelector("#bonus");
+const bonusBtn = document.querySelector("#bonus-btn");
 
 let itemsCount = 0;
 let deletedItems = 0;
@@ -27,6 +32,7 @@ addNew.addEventListener("click", () => {
 overlay.addEventListener("click", () => {
   addForm.style.display = "none";
   trash.style.display = "none";
+  addBonus.style.display = "none";
   overlay.style.visibility = "hidden";
 });
 
@@ -60,6 +66,15 @@ submit.addEventListener("click", (e) => {
     isValid = false;
   }
 
+  // Validate salary
+  if (isNaN(parseFloat(salaryField.value))) {
+    const validateSalary = document.createElement("p");
+    validateSalary.className = "error";
+    validateSalary.textContent = "Please enter a valid number";
+    salaryField.after(validateSalary);
+    isValid = false;
+  }
+
   // Validate status
   if (statusField.value.trim().length === 0) {
     const validatStatus = document.createElement("p");
@@ -81,12 +96,50 @@ submit.addEventListener("click", (e) => {
   // Create table row
   const tr = document.createElement("tr");
   const tdName = document.createElement("td");
+  tdName.id = "e-name";
   tdName.textContent = nameField.value;
   const tdRole = document.createElement("td");
   tdRole.textContent = roleField.value;
+  const tdSalary = document.createElement("td");
+  tdSalary.textContent = salaryField.value;
   const tdStatus = document.createElement("td");
   tdStatus.textContent = statusField.value;
   const tdAction = document.createElement("td");
+
+  // create Bonus action for the row
+  const bonusBtn = document.createElement("button");
+  bonusBtn.textContent = "Bonus";
+  bonusBtn.id = "bonus-btn";
+  bonusBtn.className = "edit-btn";
+  bonusBtn.addEventListener("click", () => {
+    addBonus.style.display = "block";
+    overlay.style.visibility = "visible";
+  });
+
+  bonusBtn.addEventListener("click", (row) => {
+    var salary = row.target.parentElement.parentElement.children[2];
+    submitBonus.addEventListener("click", (e) => {
+      e.preventDefault();
+      addBonus.style.display = "block";
+      overlay.style.visibility = "visible";
+
+      var bonus =
+        parseFloat(salary.textContent) * parseFloat(bonusField.value / 100);
+      var newSalary = parseFloat(salary.textContent) + bonus;
+      row.target.parentElement.parentElement.children[2].innerText = newSalary;
+
+      const bonusBadge = document.createElement("div");
+      bonusBadge.className = "bonus-badge";
+      console.log(row.target.parentElement.parentElement.children[0]);
+
+      row.target.parentElement.parentElement.children[0].appendChild(
+        bonusBadge
+      );
+
+      addBonus.style.display = "none";
+      overlay.style.visibility = "hidden";
+    });
+  });
 
   // create Edit action for the row
   const editBtn = document.createElement("button");
@@ -105,13 +158,35 @@ submit.addEventListener("click", (e) => {
     deleteRow(tr);
   });
 
-  tdAction.append(editBtn, deleteBtn);
-  tr.append(tdName, tdRole, tdStatus, tdAction);
+  tdAction.append(bonusBtn, editBtn, deleteBtn);
+  tr.append(tdName, tdRole, tdSalary, tdStatus, tdAction);
   employeesTableBody.appendChild(tr);
+
+  const totalSalary = document.querySelector("#total-salaries");
+
+  var total = 0;
+  const rows = employeesTableBody.children;
+  for (let i = 0; i < rows.length; i++) {
+    const items = rows[i].cells[2].textContent;
+    total += parseFloat(items);
+  }
+
+  totalSalary.textContent = total;
+
+  const emp_items = employeesTableBody.childNodes;
+
+  emp_items.forEach((item) => {
+    if (parseFloat(item.cells[2].textContent) >= 100000) {
+      const greenBadge = document.createElement("div");
+      greenBadge.className = "green-badge";
+      item.cells[0].appendChild(greenBadge);
+    }
+  });
 
   // Clear form fields
   nameField.value = "";
   roleField.value = "";
+  salaryField.value = 0;
   statusField.value = "";
 
   // Hide form
@@ -126,8 +201,11 @@ function editRow(row) {
   const newRole = prompt("Edit Role:", row.children[1].textContent);
   if (newRole === null) return;
 
+  const newSalary = prompt("Edit Salary:", row.children[2].textContent);
+  if (newSalary === null) return;
+
   if (newName.trim() !== "") row.children[0].textContent = newName;
-  if (newRole.trim() !== "") row.children[1].textContent = newRole;
+  if (newSalary != 0) row.children[2].textContent = newSalary;
 }
 
 function deleteRow(row) {
@@ -207,3 +285,43 @@ function deleteRow(row) {
     trashTableBody.appendChild(trashRow);
   }
 }
+
+function bonusModal(row) {
+  console.log(row.children[2].textContent);
+}
+
+// filter employees
+
+const submitFilterBtn = document.querySelector("#filter-submit");
+const filterName = document.querySelector("#filter-name");
+const filterRole = document.querySelector("#filter-role");
+const filterSalary = document.querySelector("#filter-salary");
+const filterStatus = document.querySelector("#filter-status");
+
+submitFilterBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  const nameFilter = filterName.value.toLowerCase();
+  const roleFilter = filterRole.value.toLowerCase();
+  const salaryFilter = filterSalary.value;
+  const statusFilter = filterStatus.value;
+
+  Array.from(employeesTableBody.rows).forEach((row) => {
+    const name = row.cells[0].textContent.toLowerCase();
+    const role = row.cells[1].textContent.toLowerCase();
+    const salary = row.cells[2].textContent;
+    const status = row.cells[3].textContent;
+
+    const nameMatch = name.includes(nameFilter);
+    const roleMatch = role.includes(roleFilter);
+    const salaryMatch = salary.includes(salaryFilter);
+    const statusMatch = statusFilter == "" || status == statusFilter;
+
+    const shouldShow =
+      (nameFilter === "" || nameMatch) &&
+      (roleFilter === "" || roleMatch) &&
+      (salaryFilter === "" || salaryMatch) &&
+      (statusFilter === "" || statusMatch);
+    row.style.display = shouldShow ? "" : "none";
+  });
+});
+
